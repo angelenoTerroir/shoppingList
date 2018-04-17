@@ -1,15 +1,23 @@
+// SINGLE STATE OBJECT
 
-// Single state object
 var state = {
     items: []
 };
 
-// State modification functions
+
+// STATE MODIFICATION FUNCTIONS
+
 var addItem = function(state, item) {
     state.items.push(item);
 };
 
-// Render functions
+var removeItem = function(state, item) {
+    state.items.remove(item);
+};
+
+
+// RENDER FUNCTIONS
+
 var renderList = function(state, element) {
     var itemsHTML = state.items.map(function(item) {
         return '<li>' + item + '</li>';
@@ -17,29 +25,31 @@ var renderList = function(state, element) {
     element.html(itemsHTML);
 };
 
-// Event listeners
+var deleteList = function(state, element) {
+    var itemsHTML = state.items.map(function(item) {
+        return '<li>' + item + '</li>';
+    });
+    element.remove(itemsHTML);
+};
+
+
+// EVENT LISTENERS
+
 $('#js-shopping-list-form').submit(function(event) {
     event.preventDefault();
     addItem(state, $('#shopping-list-entry').val());
     renderList(state, $('.shopping-list'));
 });
 
-
-
-
-
-
-/*
-
-
-$("#js-shopping-list-form").on(submit, function(e){
-	var text = $("#shopping-list-entry").val();
-	$(".shopping-list").append("<li>" + text + "</li>");
-	$("#shopping-list-entry").val();
-
-	e.preventDefault();
+//check
+$(".shopping-item-toggle").on(click, function(event){
+	event.preventDefault();
+	$(".shopping-item").toggleClass('shopping-item shopping-item__checked');
 });
 
-
- 
-
+//delete
+$('.shopping-item-delete').on(click, function(event) {
+    event.preventDefault();
+    removeItem(state, $('#shopping-list-entry').val());
+    deleteList(state, $('.shopping-list'));
+});
